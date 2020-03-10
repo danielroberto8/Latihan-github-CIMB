@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        table,tr,td, th{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+    <table id=1>
+        <tr>
+            <th>No.</th>
+            <th>Nama</th>
+            <th>Harga</th>
+            <th>Stock</th>
+        </tr>
+    </table>
+</body>
+<script>
+    class Items {
+        constructor(nama, price, stock, qty) {
+          this.nama = nama;
+          this.price = price;
+          this.stock = stock;
+          this.qty = 0;
+        }
+      }
+      class Fruits extends Items {
+        constructor(nama, price, stock, qty, expDate) {
+          super(nama, price, stock, qty);
+          this.expDate = expDate;
+        }
+      }
+
+      class Clothing extends Items {
+        constructor(nama, price, stock, qty, size) {
+          super(nama, price, stock, qty);
+          this.size = size;
+        }
+      }
+
+      class Handphone extends Items {
+        constructor(nama, price, stock, qty, hpWaranty) {
+          super(nama, price, stock, qty);
+          this.hpWaranty = hpWaranty;
+        }
+      }
+
+      let arrItems = [
+        new Fruits("Apel", 15000, 50, 0, "12/12/2002"),
+        new Clothing("Supreme", 80000, 50, 0, "L"),
+        new Handphone("iPhone", 100000, 10, 0, true),
+        new Fruits("Mangga", 10000, 30, 0, "12/12/2022"),
+        new Clothing("Kaos Partai", 200000, 50, 0, "M"),
+        new Handphone("Sumsang", 800000, 20, 0, false)
+      ];
+    let display = 'Daftar Buah Mahal<br>'
+    for(let i=0;i<arrItems.length;i++){
+        document.getElementById("1").innerHTML+=`<tr><td>${i+1}</td><td>${arrItems[i].nama}</td><td>${arrItems[i].price}</td><td>${arrItems[i].stock}</td></tr>`;
+    }
+    
+</script>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      table,
+      tr,
+      td,
+      th {
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: center;
+      }
+    </style>
+    <table align="center" id="change">
+      <thead>
+        <tr>
+          <th onclick="sortData('nama')">Nama</th>
+          <th onclick="sortData('pekerjaan')">Pekerjaan</th>
+          <th onclick="sortData('umur')">Umur</th>
+          <th>Picture</th>
+          <th>Opsi</th>
+        </tr>
+      </thead>
+      <tbody id="mainData"></tbody>
+      <tfoot>
+        <tr>
+          <td><input id="inputNama" type="text" placeholder="Input Name" /></td>
+          <td>
+            <input
+              id="inputPekerjaan"
+              type="text"
+              placeholder="Input Pekerjaan"
+            />
+          </td>
+          <td><input id="inputUmur" type="text" placeholder="Input Umur" /></td>
+          <td>
+            <input
+              id="inputGambar"
+              type="text"
+              placeholder="Input link gambar"
+            />
+          </td>
+          <td>
+            <input
+              id="submitBtn"
+              type="button"
+              onclick="addData();clearField()"
+              value="Submit"
+            />
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </body>
+  <script>
+    class Orang {
+      constructor(nama, pekerjaan, umur, foto) {
+        this.nama = nama;
+        this.pekerjaan = pekerjaan;
+        this.umur = umur;
+        this.foto = foto;
+      }
+    }
+    let dataOrang = [
+      new Orang(
+        "Martial",
+        "Striker",
+        24,
+        "https://resources.premierleague.com/photos/2019/12/12/c6b81300-a61e-429e-86dd-fb5672591866/anthony-martial-man-utd.jpg?width=860&height=573"
+      ),
+      new Orang(
+        "Haji Muhidin",
+        "Ketua RT",
+        60,
+        "https://statik.tempo.co/data/2012/10/04/id_143353/143353_620.jpg"
+      ),
+      new Orang(
+        "Master Limbad",
+        "Pesulap",
+        50,
+        "https://posberitakota.com/wp-content/uploads/2018/09/IMG-20180903-WA0121-2-696x742.jpg"
+      )
+    ];
+
+    const renderData = () => {
+      let hasil = "";
+      let i = 0;
+      dataOrang.forEach(({ nama, pekerjaan, umur, foto }) => {
+        hasil += `<tr>
+                    <td>${nama}</td>
+                    <td>${pekerjaan}</td>
+                    <td>${umur}</td>
+                    <td><img src="${foto}" height="140" width="140"></td>
+                    <td><input type="button" style="background-color: red; color:white;" onclick="hapusData(${i})" value="apus"</td>
+                    </tr>`;
+        i++;
+      });
+      document.getElementById("mainData").innerHTML = hasil;
+      if(i==0)
+        alert("Datanya habis lur.\nSilahkan isi data yang baru.")
+    };
+
+    let type = 0;
+    const sortData = (key) => {
+      function compare(a, b) {
+          if (a[key] < b[key]) {
+                if (type == 0) return -1;
+                else return 1;
+              }
+              else {
+                if (type == 0) return 1;
+                else return -1;
+              }
+      }
+      dataOrang.sort(compare);
+      if (type==0) type = 1;
+      else type = 0;
+
+      renderData();
+    };
+    const addData = () => {
+      let inputNama = document.getElementById("inputNama").value;
+      let inputPekerjaan = document.getElementById("inputPekerjaan").value;
+      let inputUmur = document.getElementById("inputUmur").value;
+      let inputGambar = document.getElementById("inputGambar").value;
+      if (
+        inputNama != "" &&
+        inputPekerjaan != "" &&
+        inputUmur != "" &&
+        inputGambar != ""
+      ) {
+        let newData = new Orang(
+          inputNama,
+          inputPekerjaan,
+          inputUmur,
+          inputGambar
+        );
+        dataOrang.push(newData);
+        alert("Data berhasil ditambah");
+        renderData();
+      } else {
+        alert("Field data ada yang masih kosong.");
+        renderData();
+      }
+    };
+
+    const hapusData = deleteIndex => {
+      dataOrang.splice(deleteIndex, 1);
+      renderData();
+    };
+
+    const clearField = () =>{
+      document.getElementById("inputNama").value = ''
+      document.getElementById("inputPekerjaan").value = ''
+      document.getElementById("inputUmur").value = ''
+      document.getElementById("inputGambar").value = ''
+    }
+
+    renderData();
+  </script>
+</html>

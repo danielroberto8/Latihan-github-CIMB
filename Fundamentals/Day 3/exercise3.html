@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let stokapel = 50;
+      let stokjeruk = 50;
+      let stokmangga = 50;
+      let stokpisang = 50;
+
+      let hrgapel = 20000;
+      let hrgjeruk = 30000;
+      let hrgmangga = 25000;
+      let hrgpisang = 20000;
+
+      let input;
+      let isRepeat = true;
+
+      while (isRepeat) {
+        let total = 0;
+        alert(
+          `Daftar Buah Mahal \n\n 1.Apel \n harga Rp. 20.000/buah \n stok : ${stokapel} \n\n 2.Jeruk \n harga Rp. 30.000/buah \n stok : ${stokjeruk} \n\n 3.Mangga \n harga Rp. 25.000/buah \n stok : ${stokmangga} \n\n 4.Pisang \n  harga Rp. 20.000/buah \n  stok : ${stokpisang} \n\n Klik "OK" atau tekan "Enter" untuk melanjutkan.`
+        );
+
+        if (stokapel > 0) {
+          do {
+            input = parseInt(
+              prompt("berapa jumlah apel yang ingin anda beli?")
+            );
+            if (input <= stokapel && input >= 0) {
+              stokapel = stokapel - input;
+              total = hrgapel * input;
+              isRepeat = false;
+            } else {
+              alert(
+                "Jumlah yang anda masukkan invalid atau melebihi stok.\nSilahkan mengulangi lagi."
+              );
+              isRepeat = true;
+            }
+          } while (isRepeat);
+        } else {
+          alert("Stok apelnya habis bunda :(\nLanjut ke buah jeruk yaa");
+        }
+
+        if (stokjeruk > 0) {
+          do {
+            input = parseInt(
+              prompt("berapa jumlah jeruk yang ingin anda beli?")
+            );
+            if (input <= stokjeruk && input >= 0) {
+              stokjeruk = stokjeruk - input;
+              total = total + hrgjeruk * input;
+              isRepeat = false;
+            } else {
+              alert(
+                "Jumlah yang anda masukkan invalid atau melebihi stok.\nSilahkan mengulangi lagi."
+              );
+              isRepeat = true;
+            }
+          } while (isRepeat);
+        } else {
+          alert("Stok jeruknya habis bunda :(\nLanjut ke buah mangga yaa");
+        }
+
+        if (stokmangga > 0) {
+          do {
+            input = parseInt(
+              prompt("berapa jumlah mangga yang ingin anda beli?")
+            );
+            if (input <= stokmangga && input >= 0) {
+              stokmangga = stokmangga - input;
+              total = total + hrgmangga * input;
+              isRepeat = false;
+            } else {
+              alert(
+                "Jumlah yang anda masukkan invalid atau melebihi stok.\nSilahkan mengulangi lagi."
+              );
+              isRepeat = true;
+            }
+          } while (isRepeat);
+        } else {
+          alert("Stok mangganya habis bunda :(\nLanjut ke buah pisang yaa");
+        }
+
+        if (stokpisang > 0) {
+          do {
+            input = parseInt(
+              prompt("berapa jumlah pisang yang ingin anda beli?")
+            );
+            if (input <= stokpisang && input >= 0) {
+              stokpisang = stokpisang - input;
+              total = total + hrgpisang * input;
+              isRepeat = false;
+            } else {
+              alert(
+                "Jumlah yang anda masukkan invalid atau melebihi stok.\nSilahkan mengulangi lagi."
+              );
+              isRepeat = true;
+            }
+          } while (isRepeat);
+        } else {
+          alert("Stok pisangnya habis bunda :(\nLanjut ke pembayaran yaa");
+        }
+
+        isRepeat = true;
+        while (isRepeat) {
+          let pay = parseInt(
+            prompt(
+              "Total belanjaan anda Rp." +
+                total +
+                "\nMasukkan nominal uang anda : "
+            )
+          );
+          if (pay > total) {
+            alert(
+              "Jumlah kembalian anda Rp." + (pay - total) + "\nTerima kasih.\n"
+            );
+            isRepeat = false;
+          } else if (pay < total) {
+            alert(
+              "Duitnya kurang Rp." +
+                (total - pay) +
+                " Bambang.\nSilahkan bayar sisa uang yang kurang.\n"
+            );
+            total = total - pay;
+          } else {
+            alert("Uangnya pas.\nTerima kasih. ;)\n");
+            isRepeat = false;
+          }
+        }
+
+        isRepeat = confirm('Klik "OK" jika anda ingin belanja lagi.');
+
+        if (
+          stokapel == 0 &&
+          stokjeruk == 0 &&
+          stokmangga == 0 &&
+          stokpisang == 0
+        ) {
+          alert("Stoknya habis semua... cari di tokopedia aja ya :(");
+          isRepeat = false;
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let input1 = parseInt(prompt("Masukkan nilaimu tuan muda"))
+        let grade = ''
+       // let input2 = parseInt(prompt("Masukkan angka kedua"))
+        
+       if(input1>=0 && input1<=100){
+            if(input1>=90)
+                grade = 'A'
+            else if(input1>=80)
+                grade = 'B'
+            else if(input1>=70)
+                grade = 'C'
+            else if(input1>=60)
+                grade = 'D'
+            else
+                grade = 'menyedihkan.'
+                
+            alert('Grade anda '+grade)   
+       }
+       else{
+           alert('Grade anda invalid.')
+       }     
+    </script>
+</body>
+</html>

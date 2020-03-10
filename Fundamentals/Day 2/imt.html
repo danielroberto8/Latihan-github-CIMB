@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let bb = parseInt(prompt('Masukan berat badan kamu (kg)'))
+        let tinggi = parseFloat(prompt('Masukan tinggi badan (m)'))
+        let imt = bb/(tinggi**2) //atau bisa gunakan math.pow(variabel, eksponen)
+        let result 
+
+        if(imt >= 40)
+            result = 'obesitas.'
+        else if(imt >=30)
+            result = 'BB sangat berlebih.'
+        else if(imt >=25)
+            result = 'BB berlebih.'
+        else if(imt >= 18.5)
+            result = 'cieee ideal.'
+        else
+            result = 'makan yang banyak.'          
+            
+        alert(result)    
+    </script>
+</body>
+</html>

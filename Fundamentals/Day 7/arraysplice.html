@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // let arrCity = ["BSD","Jakarta","Bandung"]
+      // let isRepeat = true
+      // do{
+      //     function hapus(input){
+      //         for(let i=0;i<arrCity.length;i++){
+      //             if(arrCity[i].toLowerCase()==input.toLowerCase()){
+      //                 arrCity.splice(i,1)
+      //             }
+      //         }
+      //     }
+      //     let input=prompt(arrCity)
+      //     hapus(input)
+      //     if(arrCity.length==0){
+      //      isRepeat=false
+      //     }
+      // }while(isRepeat)
+      
+    //   let input = prompt("masukkan kata yang ingin dibolak");
+    //   let arr = [];
+    //   let result = "";
+    //   let limit = input.length - 1;
+    //   let j = 0;
+    //   for (let i = limit; i >= 0; i--) {
+    //     arr[j] = input.charAt(i);
+    //     result += arr[j];
+    //     j++;
+    //   }
+    //   alert(result);
+
+    let arrCity = ["BSD","Jakarta","Bandung"]
+    let input=prompt('Masukkan kota yang ingin diketahui indexnya')
+    alert(repIndexOf(input))
+
+    function repIndexOf(input){
+        for(let i=0;i<arrCity.length;i++){
+            if(arrCity[i].toLowerCase()==input.toLowerCase()){
+                     return i;
+                  }
+        }
+        return -1;
+    }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let arrNames = ['Apel','Jeruk','Mangga','Pepaya']
+        let arrPrice = [10000,7000,5000,3000]
+        let arrStock = [20,30,50,60]
+
+        let daftarBuah = 'Daftar Buah Segar\n'
+
+        for(let i=0;i<arrNames.length;i++){
+            daftarBuah += '\n'+arrNames[i]+'\tRp.'+arrPrice[i]+'/pcs\t('+arrStock[i]+' items ready in stock)'
+        }
+
+        alert(daftarBuah)
+    </script>
+</body>
+</html>

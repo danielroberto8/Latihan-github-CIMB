@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let arrItems = [
+            {
+                nama : 'ANGGUR',
+                stock : 50,
+                price : 2500,
+                qty : 0
+            },{
+                nama : 'DURIANN',
+                stock : 50,
+                price : 1500,
+                qty : 0
+            },{
+                nama : 'MELOOON',
+                stock : 50,
+                price : 8000,
+                qty : 0  
+            },{
+                nama : 'NANASSS',
+                stock : 50,
+                price : 3500,
+                qty : 0
+            }
+        ]
+        //Boolean data type
+        let isRepeat = true
+        let isEmpty = true
+        let isConfirmed = false
+        //String data type
+        let choices = ''
+        let daftarBuah = ''
+        let daftarBelanja = ''
+        let tempInput = ''
+        //Integer data type
+        let change
+        let jumlahBelanja
+        let key
+        let pay
+        let totalBelanja
+        let i 
+        
+        //pengulangan besar untuk mengulangi program secara menyeluruh
+        do{
+        //Reset nilai-nilai yang sudah di assign untuk iterasi baru
+        jumlahBelanja=0
+        totalBelanja=0
+        key=0
+        pay=0
+        isEmpty=true
+        isConfirmed =false
+        //clean item qty untuk iterasi berikutnya
+        for(i=0;i<arrItems.length;i++){
+            arrItems[i].qty = 0
+        }
+
+        //Pengulangan untuk proses memilih item
+            do{
+                //Menampilkan daftar buah, harga, stok dan menampilkan prompt input
+                daftarBuah = 'Daftar Buah Segar\n'
+                    for(i=0;i<arrItems.length;i++){
+                        daftarBuah+=`\n${i+1}.${arrItems[i].nama}\tIDR Rp.${arrItems[i].price}\tstock :${arrItems[i].stock}`
+                    }
+                daftarBuah+='\n\nketik nomor buah untuk membeli.\nKetik "C" untuk melihat keranjang belanjaan dan lanjut ke pembayaran.'
+                choices=prompt(daftarBuah).toUpperCase()
+                //Membaca hasil input prompt 'daftar buah'
+                if(choices=='C'){
+                //Menampilkan daftar belanjaan
+                    daftarBelanja = 'Daftar belanja anda\n\nNo.\tNama Buah\tJumlah'
+                    for(i=0;i<arrItems.length;i++){
+                        //Memeriksa item apa yang sudah dipilih
+                        if(arrItems[i].qty>0){
+                            daftarBelanja+=`\n${i+1}.\t${arrItems[i].nama}\t${arrItems[i].qty}`
+                            isEmpty = false  //Jika ada input maka daftar belanja tidak kosong
+                        }    
+                    }       
+                    if(isEmpty){ 
+                        //Jika tidak ada item yang sudah dipilih maka eksekusi line berikut 
+                        daftarBelanja+='\n\nBelum ada daftar belanja.\nBelanja dulu gih.' 
+                        alert(daftarBelanja)
+                    }else{
+                        //Jika daftar belanja tidak kosong, maka eksekusi line berikut
+                        daftarBelanja+='\n\nKlik "OK" untuk lanjut ke pembayaran'
+                        alert(daftarBelanja)
+                        //konfirmasi jika user ingin bayar atau belanja lagi
+                        if(isRepeat){
+                            isConfirmed=confirm(`Jumlah barang yang akan anda beli ${jumlahBelanja}\nDengan total harga yang harus dibayar adalah Rp.${totalBelanja}\n\nApakah anda yakin ingin melanjutkan ke pembayaran?\n(Klik "CANCEL" jika masih ingin belanja)`)
+                            if(isConfirmed){
+                                isRepeat=false
+                            }else{
+                                isRepeat=true
+                            }                     
+                        }
+                    }
+                }else if(choices<arrItems.length+1){ 
+                    //Pengulangan untuk input buah yang dipilih
+                    do{ 
+                        //Menampilkan prompt input untuk buah yang dipilih
+                        key = choices - 1
+                        tempInput=parseInt(prompt(`Berapa jumlah ${arrItems[key].nama} yang ingin anda beli?`))
+                        //Memeriksa apakah input dari user valid atau tidak
+                        //(input tidak melebihi stok dan input tidak bernilai negatif)
+                        if(arrItems[key].qty+tempInput<=arrItems[key].stock && tempInput>=0){
+                            //Merubah nilai dari qty buah yang dipilih
+                            arrItems[key].qty+=tempInput
+                            //Menghitung jumlah item yang sudah dipilih user
+                            jumlahBelanja+=tempInput
+                            //Menghitung total belanja dari user
+                            totalBelanja+=tempInput * arrItems[key].price
+                            break
+                        }else{
+                            isRepeat = confirm('Jumlah yang anda masukkan tidak valid kisanak.\nIngin mengulangi proses input?')   
+                        }
+                    }while(isRepeat)
+                //protection apabila input tidak valid dan user memilih cancel    
+                isRepeat=true    
+                }else{
+                    alert('input yang anda masukkan tidak valid.')
+                    isRepeat=true
+                }
+            }while(isRepeat)
+            
+        
+            //Pengulangan untuk proses transaksi
+            do{
+                pay=prompt(`Total belanja Anda Rp.${totalBelanja}\nSilahkan masukkan nominal uang anda`)
+                //Kondisi jika uang yang dibayar lebih besar dari total belanja
+                if(pay>totalBelanja){
+                    change=pay-totalBelanja
+                    alert(`Kembalian anda Rp.${change}\nMakasih yak`)
+                    isRepeat=false
+                }
+                //Kondisi jika uang yang dibayar pas mantab
+                else if(pay==totalBelanja){
+                    alert('Uangnya pas.\nMantap.')
+                    isRepeat=false
+                }else if(pay<0){
+                //Kondisi jika usernya iseng memasukkan bilangan negatif    
+                    alert('Jangan masukin nilai negatif bambang.\nSilahkan masukkan input yang benar.')
+                    isRepeat=true
+                //Kondisi jika uang user lebih kecil dari total belanjaan
+                }else{  
+                    totalBelanja-=pay
+                    alert(`Uangnya kurang Rp.${totalBelanja}\nMasukkan jumlah uang yang gedean.`)
+                    isRepeat=true
+                }
+            }while(isRepeat)
+
+            //Mengurangi stok buah
+            for(i=0;i<arrItems.length;i++){
+                arrItems[i].stock-=arrItems[i].qty
+            }
+
+            //Memeriksa stok buah
+            for(i=0;i<arrItems.length;i++){
+                if(arrItems[i].stock>0){
+                    isEmpty=false
+                }
+            }
+            if(isEmpty){
+                alert('Stock buahnya habis semua bunda :(')
+                isRepeat = false
+            }
+
+            //Tanya apakah user ingin belanja lagi
+            isRepeat = confirm('Duit masih banyak kan?\nBelanja lagi lahh')
+
+        }while(isRepeat)
+    </script>
+</body>
+</html>

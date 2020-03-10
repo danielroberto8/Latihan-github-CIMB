@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      class Items {
+        constructor(nama, price, stock, qty) {
+          this.nama = nama;
+          this.price = price;
+          this.stock = stock;
+          this.qty = 0;
+        }
+      }
+
+      class Fruits extends Items {
+        constructor(nama, price, stock, qty, expDate) {
+          super(nama, price, stock, qty);
+          this.expDate = expDate;
+        }
+      }
+
+      class Clothing extends Items {
+        constructor(nama, price, stock, qty, size) {
+          super(nama, price, stock, qty);
+          this.size = size;
+        }
+      }
+
+      class Handphone extends Items {
+        constructor(nama, price, stock, qty, hpWaranty) {
+          super(nama, price, stock, qty);
+          this.hpWaranty = hpWaranty;
+        }
+      }
+
+      let arrItems = [
+        new Fruits("Apel", 15000, 50, 0, "12/12/2002"),
+        new Clothing("Supreme", 80000, 50, 0, "L"),
+        new Handphone("iPhone", 100000, 10, 0, true),
+        new Fruits("Mangga", 10000, 30, 0, "12/12/2022"),
+        new Clothing("Kaos Partai", 200000, 50, 0, "M"),
+        new Handphone("Sumsang", 800000, 20, 0, false)
+      ];
+      let arrSort = [];
+
+      //Boolean data type
+      let isRepeat = true;
+      let isEmpty = true;
+      let isConfirmed = false;
+      let isExit = false;
+      //String data type
+      let choices = "";
+      let daftarBuah = "";
+      let daftarBelanja = "";
+      let tempInput = "";
+      let menuAdmin = "";
+      //Integer data type
+      let change = 0;
+      let jumlahBelanja = 0;
+      let key = 0;
+      let pay = 0;
+      let totalBelanja = 0;
+      let i = 0;
+
+      //MAIN PROGRAM
+      do {
+        mainMenu();
+        if (choices == 1) {
+          adminMenu();
+          isRepeat = true;
+        } else if (choices == 2) {
+          userMenu();
+          isRepeat = true;
+        } else if (choices == 3) {
+          isRepeat = confirm("Apakah anda yakin ingin keluar?\n");
+          if (isRepeat == false) {
+            isRepeat = true;
+          } else {
+            isRepeat = false;
+          }
+        } else {
+          alert("Inputnya tidak valid sapri.");
+          isRepeat = true;
+        }
+      } while (isRepeat);
+
+      //FUNCTION LIST
+      function mainMenu() {
+        choices = prompt("1.Admin\n2.User\n3.Exit\n");
+      }
+
+      function adminMenu() {
+        do {
+          choices = prompt(
+            "ADMIN MENU\n1.Tambah Data Buah\n2.Tambah Data Baju\n3.Tambah data HP\n4.Hapus Data\n5.Exit to main menu\n"
+          );
+          if (choices == 1) {
+            addFruitList();
+          } else if (choices == 2) {
+            addClothingList();
+          } else if (choices == 3) {
+            addHpList();
+          } else if (choices == 4) {
+            deleteItem();
+          } else {
+            isRepeat = false;
+          }
+        } while (isRepeat);
+      }
+
+      function userMenu() {
+        do {
+          resetCondition();
+          do {
+            groupArrayList();
+            displayMenu();
+            if (choices == "C") {
+              displayCart();
+              isExit = false;
+            } else if (choices < arrItems.length + 1) {
+              addItemCart(key);
+              //protection apabila input tidak valid dan user memilih cancel
+              isRepeat = true;
+            } else if (choices == arrItems.length + 1) {
+              isRepeat = false;
+              isExit = true;
+            } else {
+              alert("input yang anda masukkan tidak valid.");
+              isRepeat = true;
+            }
+          } while (isRepeat);
+
+          if (isExit) {
+            continue;
+          }
+
+          do {
+            transaksi();
+          } while (isRepeat);
+
+          stockControl();
+
+          isRepeat = confirm("Duit masih banyak kan?\nBelanja lagi lahh");
+        } while (isRepeat);
+      }
+
+      function addFruitList() {
+        let namaBuahTemp = "";
+        let stockBuahTemp = 0;
+        let hargaBuahTemp = 0;
+        let expBuahTemp = "";
+        let isValid = true;
+        do {
+          do {
+            namaBuahTemp = prompt("Masukkan nama buah :");
+            for (i = 0; i < arrItems.length; i++) {
+              if (arrItems[i].nama == namaBuahTemp) {
+                alert("Nama buah sudah ada.");
+                isRepeat = true;
+                break;
+              } else {
+                isRepeat = false;
+              }
+            }
+          } while (isRepeat);
+
+          do {
+            stockBuahTemp = parseInt(prompt("Masukkan stock buah :"));
+            if (stockBuahTemp > 0) {
+              isRepeat = false;
+            } else {
+              alert("Jangan masukin angka minus bang.");
+              isRepeat = true;
+            }
+          } while (isRepeat);
+
+          do {
+            hargaBuahTemp = parseInt(prompt("Masukkan harga buah :"));
+            if (hargaBuahTemp > 0) {
+              isValid = true;
+              isRepeat = false;
+            } else {
+              alert("Jangan masukin angka minus bang.");
+              isRepeat = true;
+            }
+          } while (isRepeat);
+
+          do {
+            expBuahTemp = prompt("Masukkan tanggal expire buah : (dd/mm/yyyy)\nHarus pake garis miring yak");
+            if (expBuahTemp != " ") {
+              isValid = true;
+              isRepeat = false;
+            } else {
+              alert("Masukin tanggalnya yang bener samsul.");
+              isRepeat = true;
+            }
+          } while (isRepeat);
+
+          if (isValid) {
+            arrItems.push(
+              new Fruits(
+                namaBuahTemp,
+                hargaBuahTemp,
+                stockBuahTemp,
+                0,
+                expBuahTemp
+              )
+            );
+            isRepeat = false;
+          } else {
+            isRepeat = true;
+          }
+        } while (isRepeat);
+      }
+
+      function addClothingList() {
+        let namaBajuTemp = "";
+        let stockBajuTemp = 0;
+        let hargaBajuTemp = 0;
+        let sizeBajuTemp = "";
+        let isValid = true;
+        do {
+          do {
+            namaBajuTemp = prompt("Masukkan nama baju :");
+            for (i = 0; i < arrItems.length; i++) {
+              if (arrItems[i].nama == namaBajuTemp) {
+                alert("Nama baju sudah ada.");
+                isRepeat = true;
+                break;
+              } else {
+                isRepeat = false;
+              }
+            }
+          } while (isRepeat);
+
+          do {
+            stockBajuTemp = parseInt(prompt("Masukkan stock baju :"));
+            if (stockBajuTemp > 0) {
+              isRepeat = false;
+            } else {
+              alert("Jangan masukin angka minus bang.");
+              isRepeat = true;
+            }
+          } while (isRepeat);
+
+          do {
+            hargaBajuTemp = parseInt(prompt("Masukkan harga baju :"));
+            if (hargaBajuTemp > 0) {
+              isValid = true;
+              isRepeat = false;
+            } else {
+              alert("Jangan masukin angka minus bang.");
+              isRepeat = true;
+            }
+          } while (isRepeat);
+
+          do {
+            sizeBajuTemp = prompt("Masukkan ukuran baju :");
+            if (sizeBajuTemp != " ") {
+              isValid = true;
+              isRepeat = false;
+            } else {
+              alert("Masukin ukurannya yang bener samsul.");
+              isRepeat = true;
+            }
+          } while (isRepeat);
+
+          if (isValid) {
+            arrItems.push(
+              new Clothing(
+                namaBajuTemp,
+                hargaBajuTemp,
+                stockBajuTemp,
+                0,
+                sizeBajuTemp
+              )
+            );
+            isRepeat = false;
+          } else {
+            isRepeat = true;
+          }
+        } while (isRepeat);
+      }
+
+      function addHpList() {
+        let namaHpTemp = "";
+        let stockHpTemp = 0;
+        let hargaHpTemp = 0;
+        let warantyHpTemp = true;
+        let isValid = true;
+        do {
+          do {
+            namaHpTemp = prompt("Masukkan nama hp :");
+            for (i = 0; i < arrItems.length; i++) {
+              if (arrItems[i].nama == namaHpTemp) {
+                alert("Nama baju sudah ada.");
+                isRepeat = true;
+                break;
+              } else {
+                isRepeat = false;
+              }
+            }
+          } while (isRepeat);
+
+          do {
+            stockHpTemp = parseInt(prompt("Masukkan stock hp :"));
+            if (stockHpTemp > 0) {
+              isRepeat = false;
+            } else {
+              alert("Jangan masukin angka minus bang.");
+              isRepeat = true;
+            }
+          } while (isRepeat);
+
+          do {
+            hargaHpTemp = parseInt(prompt("Masukkan harga hp :"));
+            if (hargaHpTemp > 0) {
+              isValid = true;
+              isRepeat = false;
+            } else {
+              alert("Jangan masukin angka minus bang.");
+              isRepeat = true;
+            }
+          } while (isRepeat);
+
+          warantyHpTemp = confirm(
+            "ada garansinya ga ini hp ? \nKalo ga ada klik 'CANCEL'. "
+          );
+
+          if (isValid) {
+            arrItems.push(
+              new Handphone(
+                namaHpTemp,
+                hargaHpTemp,
+                stockHpTemp,
+                0,
+                warantyHpTemp
+              )
+            );
+            isRepeat = false;
+          } else {
+            isRepeat = true;
+          }
+        } while (isRepeat);
+      }
+
+      function deleteItem() {
+        let isDelete = false;
+        let deleteItem = prompt("Masukkan nama item yang ingin dihapuz");
+        for (i = 0; i < arrItems.length; i++) {
+          if (arrItems[i].nama.toLowerCase() == deleteItem.toLowerCase()) {
+            isDelete = confirm(
+              `Yakin ingin menghapus ${arrItems[i].nama} lur?`
+            );
+            if (isDelete) {
+              arrItems.splice(i, 1);
+              break;
+            }
+          }
+
+          if (i == arrItems.length - 1) {
+            alert(`Data dengan nama ${deleteItem} tidak ditemukan slur.`);
+          }
+        }
+      }
+
+      function displayMenu() {
+        //Menampilkan daftar buah, harga, stok dan menampilkan prompt input
+        let daftarItem = "Daftar Item Toko Serba Ada\n";
+        for (i = 0; i < arrItems.length; i++) {
+          daftarItem += `\n${i + 1}.${arrItems[i].nama} IDR Rp.${
+            arrItems[i].price
+          }, stock: ${arrItems[i].stock}, `;
+          if (arrItems[i].expDate != undefined) {
+            daftarItem += `expire: ${arrItems[i].expDate}`;
+          } else if (arrItems[i].size != undefined) {
+            daftarItem += `size: ${arrItems[i].size}`;
+          } else {
+            if (arrItems[i].hpWaranty) daftarItem += "garansi TAM 10 tahun.";
+            else daftarItem += "garansinya ga ada.";
+          }
+        }
+        daftarItem +=
+          "\n\n" +
+          (arrItems.length + 1) +
+          '.Exit to main menu\n\nketik nomor buah untuk membeli.\nKetik "C" untuk melihat keranjang belanjaan dan lanjut ke pembayaran.';
+        choices = prompt(daftarItem).toUpperCase();
+      }
+
+      function groupArrayList() {
+        let count = 0;
+        //alert(arrItems.length)
+        for (i = 0; i < arrItems.length - 1; i++) {
+          for (let j = i + 1; j < arrItems.length; j++) {
+            if (
+              arrItems[i].expDate == undefined &&
+              arrItems[j].expDate != undefined
+            ) {
+              temp = arrItems[j];
+              arrItems[j] = arrItems[i];
+              arrItems[i] = temp;
+            }
+          }
+        }
+
+        for (i = 0; i < arrItems.length; i++) {
+          if (arrItems[i].expDate != undefined) {
+            count++;
+          }
+        }
+
+        for (i = count; i < arrItems.length - 1; i++) {
+          for (let j = i + 1; j < arrItems.length; j++) {
+            if (
+              arrItems[i].size == undefined &&
+              arrItems[j].size != undefined
+            ) {
+              temp = arrItems[j];
+              arrItems[j] = arrItems[i];
+              arrItems[i] = temp;
+              count++;
+            }
+          }
+        }
+      }
+
+      function displayCart() {
+        daftarBelanja = "Daftar belanja anda\n\nNo.\tNama Buah\tJumlah";
+        for (i = 0; i < arrItems.length; i++) {
+          //Memeriksa item apa yang sudah dipilih
+          if (arrItems[i].qty > 0) {
+            daftarBelanja += `\n${i + 1}.\t${arrItems[i].nama}\t${
+              arrItems[i].qty
+            }`;
+            isEmpty = false; //Jika ada input maka daftar belanja tidak kosong
+          }
+        }
+        if (isEmpty) {
+          //Jika tidak ada item yang sudah dipilih maka eksekusi line berikut
+          daftarBelanja += "\n\nBelum ada daftar belanja.\nBelanja dulu gih.";
+          alert(daftarBelanja);
+        } else {
+          //Jika daftar belanja tidak kosong, maka eksekusi line berikut
+          daftarBelanja += '\n\nKlik "OK" untuk lanjut ke pembayaran';
+          alert(daftarBelanja);
+          //konfirmasi jika user ingin bayar atau belanja lagi
+          if (isRepeat) {
+            isConfirmed = confirm(
+              `Jumlah barang yang akan anda beli ${jumlahBelanja}\nDengan total harga yang harus dibayar adalah Rp.${totalBelanja}\n\nApakah anda yakin ingin melanjutkan ke pembayaran?\n(Klik "CANCEL" jika masih ingin belanja)`
+            );
+            if (isConfirmed) {
+              isRepeat = false;
+            } else {
+              isRepeat = true;
+            }
+          }
+        }
+      }
+
+      function checkDate(dateExp){
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = String(today.getFullYear());
+        let curDate = [dd,mm,yyyy]
+
+        let tempDate = dateExp.split('/')
+        let isOkay = false
+
+        for(i=curDate.length-1;i>=0;i--){
+          if(curDate[i]<tempDate[i]){
+            isOkay = true;
+            break;
+          }else if(curDate[i]>tempDate[i]){
+            isOkay = false;
+            break;
+          }else{
+            continue;
+          }
+        }
+
+        return isOkay;
+      }
+
+      function addItemCart(key) {
+        do {
+          //Menampilkan prompt input untuk buah yang dipilih
+          key = choices - 1;
+          if(arrItems[key].expDate!=undefined && checkDate(arrItems[key].expDate)==false){
+            alert('Buahnya sudah expire bang :(')
+            break;
+          }
+          tempInput = parseInt(
+            prompt(`Berapa jumlah ${arrItems[key].nama} yang ingin anda beli?`)
+          );
+          //Memeriksa apakah input dari user valid atau tidak
+          //(input tidak melebihi stok dan input tidak bernilai negatif)
+          if (
+            arrItems[key].qty + tempInput <= arrItems[key].stock &&
+            tempInput >= 0
+          ) {
+            //Merubah nilai dari qty item yang dipilih
+            arrItems[key].qty += tempInput;
+            //Menghitung jumlah item yang sudah dipilih user
+            jumlahBelanja += tempInput;
+            //Menghitung total belanja dari user
+            totalBelanja += tempInput * arrItems[key].price;
+            break;
+          } else {
+            isRepeat = confirm(
+              "Jumlah yang anda masukkan tidak valid kisanak.\nIngin mengulangi proses input?"
+            );
+          }
+        } while (isRepeat);
+      }
+
+      function transaksi() {
+        pay = prompt(
+          `Total belanja Anda Rp.${totalBelanja}\nSilahkan masukkan nominal uang anda`
+        );
+        //Kondisi jika uang yang dibayar lebih besar dari total belanja
+        if (pay > totalBelanja) {
+          change = pay - totalBelanja;
+          alert(`Kembalian anda Rp.${change}\nMakasih yak`);
+          isRepeat = false;
+        }
+        //Kondisi jika uang yang dibayar pas mantab
+        else if (pay == totalBelanja) {
+          alert("Uangnya pas.\nMantap.");
+          isRepeat = false;
+        } else if (pay < 0) {
+          //Kondisi jika usernya iseng memasukkan bilangan negatif
+          alert(
+            "Jangan masukin nilai negatif bambang.\nSilahkan masukkan input yang benar."
+          );
+          isRepeat = true;
+          //Kondisi jika uang user lebih kecil dari total belanjaan
+        } else {
+          totalBelanja -= pay;
+          alert(
+            `Uangnya kurang Rp.${totalBelanja}\nMasukkan jumlah uang yang gedean.`
+          );
+          isRepeat = true;
+        }
+      }
+
+      function resetCondition() {
+        jumlahBelanja = 0;
+        totalBelanja = 0;
+        key = 0;
+        pay = 0;
+        isEmpty = true;
+        isConfirmed = false;
+        //clean item qty untuk iterasi berikutnya
+        for (i = 0; i < arrItems.length; i++) {
+          arrItems[i].qty = 0;
+        }
+      }
+
+      function stockControl() {
+        //Mengurangi stok buah
+        for (i = 0; i < arrItems.length; i++) {
+          arrItems[i].stock -= arrItems[i].qty;
+        }
+
+        //Memeriksa stok buah
+        for (i = 0; i < arrItems.length; i++) {
+          if (arrItems[i].stock > 0) {
+            isEmpty = false;
+          }
+        }
+        if (isEmpty) {
+          alert("Stock buahnya habis semua bunda :(");
+          isRepeat = false;
+        }
+      }
+    </script>
+  </body>
+</html>

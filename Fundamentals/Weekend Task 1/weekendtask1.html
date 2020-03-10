@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let arrVokal = ["a", "i", "u", "e", "o"];
+      let arrNumList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+      let arrNum = [];
+      let arrString = [];
+      let arrInput = [];
+      let isRepeat = true;
+      let isAsc = true;
+      let isNumber = true;
+      let display = "";
+      let displayResult = "";
+      let key = "";
+      let input = "";
+      let result = "";
+      let choices = "";
+      let temp = "";
+      let isVocal = "";
+      let inputLim = 3; //limit untuk jumlah array yang diinput pada function 2,3,4
+      let biggest = 0;
+      let count = 0;
+      let limit = 0;
+      let i = 0;
+      let j = 0;
+
+      do {
+        display =
+          "1.Hapus huruf vokal\n2.Sort array fo strings A-Z or Z-A\n3.Sort array integer\n4.Display angka terbesar dari sekumpulan array\n5.Filter input hanya untuk integer\n6.Hapus huruf awal dan akhir\n\nMasukkan pilihan anda";
+        choices = prompt(display);
+
+        if (choices == 1) {
+            alert("FUNCTION MENGHAPUS HURUF VOKAL")  
+            input = prompt("Masukkan kata atau kalimat yang ingin disortir");
+            alert(hapusHurufVokal(input));     
+        } 
+        
+        else if (choices == 2) {
+            alert("FUNCTION MENGURUTKAN STRING DALAM ARRAY\n(ASCENDING / DESCENDING)")  
+          for (i = 0; i < inputLim; i++) {
+            arrString[i] = prompt(`Masukkan string ke-${i + 1}`);
+          }
+
+          display = "Daftar string :\n";
+          for (i = 0; i < arrString.length; i++) {
+            display += `\n${arrString[i]}`;
+          }
+          display +=
+            "\n\nKetik '1' untuk ascending atau ketik '2' untuk descending";
+          do {
+            input = prompt(display);
+            if (input == 1) {
+                isAsc = true;
+                isRepeat = false;
+            } else if (input == 2) {
+                isAsc = false;
+                isRepeat = false;
+                } else {
+                alert("invalid input\nSilahkan mengulanginya lagi.");
+                isRepeat = true;
+                }
+                } while (isRepeat);
+                arrString = sortArray(arrString, isAsc);
+                if (isAsc) {
+                    displayResult = "Urutan string dalam bentuk ascending\n";
+                } else {
+                    displayResult = "Urutan string dalam bentuk descending\n";
+                }
+                for (i = 0; i < arrString.length; i++) {
+                    displayResult += `\n${arrString[i]}`;
+                }
+            alert(displayResult);
+        } 
+        
+        else if (choices == 3) {
+            alert("FUNCTION MENSORTIR ARRAY BERISI ANGKA")
+            for (i = 0; i < inputLim; i++) {
+                arrInput[i] = prompt(`Masukan data ke-${i + 1}`);
+            }
+            arrNum = cariArrayNumber(arrInput);
+            if (arrNum.length > 0) {
+                display =
+                "dari input yang anda masukkan, array yang terdiri dari angka adalah\n";
+                for (i = 0; i < arrNum.length; i++) {
+                display += `\n${arrNum[i]}`;
+                }
+            } else {
+                display = "Tidak ada array yang terdiri dari angka.";
+            }
+            display += `\n\nJumlah data yang ditemukan : ${arrNum.length}`;
+            alert(display);
+        } 
+        
+        else if (choices == 4) {
+            alert("FUNCTION MENAMPILKAN ANGKA TERBESAR DALAM SUATU ARRAY")
+            i=0
+            do {
+                arrNum[i] = parseInt(prompt(`Masukkan angka ke-${i + 1}`));
+                if (isNaN(arrNum[i]) == false) i++;
+                else alert("Becanda aja nih.\nMasukkan angka ya samsul.");
+            } while (i < inputLim);
+            result = angkaTerbesar(arrNum);
+            display = "Nilai terbesar dari\n\n";
+            for (i = 0; i < inputLim; i++) {
+                display += `${arrNum[i]}  `;
+            }
+            display += `\n\nAdalah : ${result}`;
+            alert(display);
+        } 
+        
+        else if (choices == 5) {
+            alert("FUNCTION MENYARING INPUT BERNILAI ANGKA")
+            do{
+            input = prompt("Masukkan input");
+            isNumber = menentukanInt(input);
+            if(isNumber){
+                alert("Input sudah benar.")
+                break;
+            }else{
+                alert("Input salah dul.")
+                isRepeat=true
+            }
+            }while(isRepeat)
+        } 
+        
+        else if (choices == 6) {
+            alert("FUNCTION MENGHAPUS HURUF PERTAMA DAN HURUF TERAKHIR")
+            do {
+                input = prompt("Masukkan string (lebih dari 2 karakter ya)");
+                if (input.length > 2) {
+                alert(hapusHurufAwalAkhir(input));
+                isRepeat = false;
+                } else
+                isRepeat = confirm(
+                    `${input}\nInputnya kekecilan pak haji.\nMau diulangin lagi?`
+                );
+            } while (isRepeat);
+        } 
+        
+        else {
+            alert("Inputnya tydac sah.");
+            isRepeat = true;
+            continue;
+        }
+
+        isRepeat = confirm("Mau diulangin lagi gak bosku?");
+
+        //Function 1 (hapus huruf vokal)
+        function hapusHurufVokal(key) {
+        result=''
+          for (i = 0; i < key.length; i++) {
+            for (j = 0; j < arrVokal.length; j++) {
+              if (key.charAt(i) == arrVokal[j]) {
+                isVocal = true;
+                break;
+              } else {
+                isVocal = false;
+              }
+            }
+            if (isVocal == false) result += key.charAt(i);
+          }
+          return result;
+        }
+
+        //Function 2 (sorting array of strings)
+        function sortArray(arrInput, sortType) {
+          // Built - in function
+          if (sortType) {
+            arrInput.sort();
+          } else {
+            arrInput.sort(function(a, b) {
+              if (a > b) {
+                return -1;
+              }
+              if (b > a) {
+                return 1;
+              }
+              return 0;
+            });
+          }
+          return arrInput;
+        }
+
+        //Function 3 (mencari array yang berisi nomor)
+        function cariArrayNumber(arrInput) {
+          count = 0;
+          arrNum = [];
+          for (i = 0; i < arrInput.length; i++) {
+            if (isNaN(arrInput[i]) == false) {
+              arrNum[count] = arrInput[i];
+              count++;
+            }
+          }
+          return arrNum;
+        }
+
+        //Function 4 (Mencari nilai terbesar)
+        function angkaTerbesar(arrInput) {
+          biggest=arrInput[0]
+          for (i = 0; i < arrInput.length; i++) {
+              if (arrInput[i] > biggest) {
+                biggest = arrInput[i];
+              }           
+          }
+          return biggest;
+        }
+
+        //Function 5 (filter input)
+        function menentukanInt(key) {
+          for (i = 0; i < key.length; i++) {
+            if (isNaN(key.charAt(i))) {
+              isNumber = false;
+              break;
+            } else {
+              isNumber = true;
+            }
+          }
+          return isNumber;
+        }
+
+        //Function 6 (menghapus huruf awal dan akhir)
+        function hapusHurufAwalAkhir(key) {
+          result = key;
+          result = key.replace(result.charAt(0), "");
+          result = result.replace(result.charAt(result.length - 1), "");
+          return result;
+        }
+      } while (isRepeat);
+    </script>
+  </body>
+</html>
