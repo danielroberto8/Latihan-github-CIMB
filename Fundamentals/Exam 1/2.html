@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fundamental Exam</title>
+  </head>
+  <body></body>
+  <script>
+    const smallBig = arr => {
+      let smalest = arr[0];
+      let bigest = arr[0];
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] > bigest) {
+          bigest = arr[i];
+        } else if (arr[i] < smalest) {
+          smalest = arr[i];
+        }
+      }
+      console.log(`Deret angka sebelum diurutkan : ${arr}`);
+      sorting(arr);
+      print(smalest, bigest);
+    };
+
+    const sorting = arr => {
+      for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr.length - 1; j++) {
+          if (arr[j] > arr[j + 1]) {
+            let temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+          }
+        }
+      }
+    };
+
+    const print = (small, big) => {
+      console.log(
+        `Deret angka sesudah diurutkan : ${arr}\nNilai terkecil adalah = ${small}\nNilai terbesar adalah = ${big}`
+      );
+      alert("cek console.");
+    };
+
+    let arr = [];
+    let key = 0;
+    let i = 0;
+    let isValid = false;
+    do {
+      key = prompt("Masukkan input ke-" + (i + 1) + " :");
+      if (isNaN(key) || key == "") {
+        break;
+      }
+      isValid = true;
+      arr.push(parseInt(key));
+      i++;
+    } while (true);
+    if (isValid) {
+      smallBig(arr);
+    }
+  </script>
+</html>

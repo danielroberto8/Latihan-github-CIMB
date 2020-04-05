@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body style="text-align: center;">
+    <input type="text" id="inputNum" />
+    <input
+      type="button"
+      id="kapersky"
+      onclick="kaprekarConstant()"
+      value="Go!"
+    />
+    <p id="result"></p>
+  </body>
+  <script>
+    //Main Function
+    const kaprekarConstant = () => {
+      if (protection(document.getElementById("inputNum").value) == false) {
+        return alert("Inputnya yang bener dul.");
+      }
+      let num = document.getElementById("inputNum").value.split("");
+      let resultNum = 0;
+      let display = "";
+      for (let i = 1; i <= 7; i++) {
+        resultNum =
+          parseInt(descending(num)) -
+          parseInt(
+            descending(num)
+              .split("")
+              .reverse()
+              .join("")
+          );
+        display += `${descending(num)} - ${descending(num)
+          .split("")
+          .reverse()
+          .join("")} = ${resultNum}<br>`;
+        num = resultNum.toString().split("");
+        if (num.length < 4) {
+          num.push("0");
+        }
+        if (num.join("") == 6174) {
+          display += `<br>Iterasi sebanyak : ${i} kali.`;
+          break;
+        }
+      }
+      document.getElementById("result").innerHTML = display;
+    };
+
+    //Sort besar ke kecil
+    const descending = key => {
+      for (let i = 0; i < key.length - 1; i++) {
+        for (let j = i + 1; j < key.length; j++) {
+          if (key[i] < key[j]) {
+            let temp = key[j];
+            key[j] = key[i];
+            key[i] = temp;
+          }
+        }
+      }
+      return key.join("");
+    };
+
+    //Protection
+    const protection = key => {
+      if (
+        isNaN(key) ||
+        key.toString().length != 4 ||
+        key -
+          key
+            .split("")
+            .reverse()
+            .join("") ==
+          0
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    };
+  </script>
+</html>

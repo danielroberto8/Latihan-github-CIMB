@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    table,
+    tr,
+    td,
+    th {
+      border: 1px solid black;
+      border-collapse: collapse;
+      text-align: center;
+    }
+  </style>
+  <body>
+    <table id="matriks"></table>
+    <br />
+    <input type="number" id="inputMatriks" />
+    <input
+      type="button"
+      id="rightBtn"
+      value="Rotate Right"
+      onclick="rotate(arr,0)"
+    />
+    <input
+      type="button"
+      id="LeftBtn"
+      value="Rotate Left"
+      onclick="rotate(arr,1)"
+    />
+    <br />
+    <input type="button" value="Reset" onclick="reset()" />
+  </body>
+  <script>
+    let arr = [
+      [1, 2, 3, 4],
+      [5, 6, 7, 8],
+      [9, 10, 11, 12],
+      [13, 14, 15, 16]
+    ];
+    let arr2 = [
+      [1, 2, 3, 4],
+      [5, 6, 7, 8],
+      [9, 10, 11, 12],
+      [13, 14, 15, 16]
+    ];
+    let sortHorizon = [0, 0, 0, 0];
+    let sortVertical = [0, 0, 0, 0];
+    const showMatriks = arr => {
+      let result = "";
+      for (let i = 0; i < arr.length + 1; i++) {
+        result += "<tr>";
+        if (i == arr.length) {
+          for (let j = 0; j < arr.length; j++) {
+            result += `<td><input type="button" value="sort" onclick="sortMatriks(${j},1)">`;
+          }
+        } else {
+          for (let j = 0; j < arr.length + 1; j++) {
+            if (j == arr.length) {
+              result += `<td><input type="button" value="sort" onclick="sortMatriks(${i},0)"></td>`;
+            } else {
+              result += `<td>${arr[i][j]}</td>`;
+            }
+          }
+        }
+        result += "</tr>";
+      }
+      document.getElementById("matriks").innerHTML = result;
+    };
+
+    let type = 0;
+    const sortMatriks = (key, cordinat) => {
+      let arrRes = [];
+      if (cordinat == 0) {
+        if (sortHorizon[key] == 0) {
+          type = 0;
+        } else {
+          type = 1;
+        }
+        arrRes = [...arr[key]];
+      } else {
+        if (sortVertical[key] == 0) {
+          type = 0;
+        } else {
+          type = 1;
+        }
+        for (let i = 0; i < arr.length; i++) {
+          arrRes.push(arr[i][key]);
+        }
+      }
+
+      for (let i = 0; i < arrRes.length; i++) {
+        for (let j = 0; j < arrRes.length; j++) {
+          if (type == 0) {
+            if (arrRes[j] < arrRes[j + 1]) {
+              let temp = arrRes[j];
+              arrRes[j] = arrRes[j + 1];
+              arrRes[j + 1] = temp;
+            }
+          } else {
+            if (arrRes[j] > arrRes[j + 1]) {
+              let temp = arrRes[j];
+              arrRes[j] = arrRes[j + 1];
+              arrRes[j + 1] = temp;
+            }
+          }
+        }
+      }
+
+      if (cordinat == 0) {
+        if (type == 1) {
+          sortHorizon[key] = 0;
+        } else {
+          sortHorizon[key] = 1;
+        }
+        arr[key] = [...arrRes];
+      } else {
+        if (type == 1) {
+          sortVertical[key] = 0;
+        } else {
+          sortVertical[key] = 1;
+        }
+        for (let i = 0; i < arr.length; i++) {
+          arr[i][key] = arrRes[i];
+        }
+      }
+
+      showMatriks(arr);
+    };
+
+    const rotate = (arr, type) => {
+      let input = document.getElementById("inputMatriks").value;
+      if (type == 1) {
+        input = input * 3;
+      }
+      var n = arr.length;
+      for (let x = 0; x < input; x++) {
+        for (var i = 0; i < n / 2; i++) {
+          for (var j = i; j < n - i - 1; j++) {
+            var tmp = arr[i][j];
+            arr[i][j] = arr[n - j - 1][i];
+            arr[n - j - 1][i] = arr[n - i - 1][n - j - 1];
+            arr[n - i - 1][n - j - 1] = arr[j][n - i - 1];
+            arr[j][n - i - 1] = tmp;
+          }
+        }
+      }
+      showMatriks(arr);
+    };
+
+    const reset = () => {
+      sortHorizon = [0, 0, 0, 0];
+      sortVertical = [0, 0, 0, 0];
+      arr = arr2;
+      showMatriks(arr);
+    };
+
+    showMatriks(arr);
+  </script>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Stopwatch</h1>
+    <h1 id="time">00:00:00</h1>
+    <input type="button" value="start" onclick="startWatch()" /><input
+      type="button"
+      value="stop"
+      onclick="stopWatch()"
+    />
+    <br />
+    <input type="button" value="Lap" onclick="getLap()" /><input
+      type="button"
+      value="Reset"
+      onclick="resetWatch()"
+    />
+    <p id="lap"></p>
+  </body>
+  <script>
+    let m = 0;
+    let s = 0;
+    let ms = 0;
+    let min = "";
+    let sec = "";
+    let minsec = "";
+    let laps = 0;
+    let watch;
+
+    const startWatch = () => {
+      watch = setInterval(() => {
+        if (ms == 99) {
+          ms = 0;
+          s++;
+          if (s == 60) {
+            s = 0;
+            m++;
+            if (m == 60) {
+              resetWatch();
+              return alert("udah sejam, ngitungnya capek :(");
+            }
+          }
+        }
+        ms++;
+        min = m;
+        sec = s;
+        milsec = ms;
+        if (m < 10) {
+          min = "0" + m;
+        }
+        if (s < 10) {
+          sec = "0" + s;
+        }
+        if (ms < 10) {
+          milsec = "0" + ms;
+        }
+        document.getElementById("time").innerHTML = `${min}:${sec}:${milsec}`;
+      }, 10);
+    };
+
+    const stopWatch = () => {
+      clearInterval(watch);
+    };
+
+    const getLap = () => {
+      if (ms == 0) {
+        return alert("Stopwatch belum dimulai.");
+      }
+      laps++;
+      document.getElementById(
+        "lap"
+      ).innerHTML += `Lap ke-${laps}<br> ${min}:${sec}:${milsec}<br><br>`;
+    };
+
+    const resetWatch = () => {
+      m = 0;
+      s = 0;
+      ms = 0;
+      laps = 0;
+      clearInterval(watch);
+      document.getElementById("time").innerHTML = "00:00:00";
+      document.getElementById("lap").innerHTML = "";
+    };
+  </script>
+</html>

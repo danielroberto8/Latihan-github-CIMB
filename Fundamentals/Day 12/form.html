@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body
+    style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"
+  >
+    <style>
+      table,
+      tr,
+      td,
+      th {
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: center;
+      }
+    </style>
+    <fieldset>
+      <legend>Filter</legend>
+      <label for="searchNama">Nama : </label>
+      <input
+        type="text"
+        id="searchNama"
+        name="Name"
+        onkeyup="filterData()"
+      /><br /><br />
+      <label for="searchHargaMin">Harga : </label>
+      <input
+        type="number"
+        id="searchHargaMin"
+        name="Harga Minimal"
+        onkeyup="filterData()"
+      />
+      -
+      <input
+        type="number"
+        id="searchHargaMax"
+        name="Harga Maksimal"
+        onkeyup="filterData()"
+      /><br /><br />
+      <label for="searchCategory">Category : </label>
+      <select
+        type="text"
+        id="searchCategory"
+        name="Category"
+        onchange="filterData()"
+      >
+        <option value="All">All</option>
+        <option value="Buah">Buah</option>
+        <option value="Baju">Baju</option>
+        <option value="Elektronik">Elektronik</option> </select
+      ><br /><br />
+      <p id="noFound"></p>
+    </fieldset>
+    <fieldset>
+      <legend>Input Data</legend>
+      <table>
+        <td><input type="text" id="inputNama" placeholder="Input Nama" /></td>
+        <td>
+          <input type="number" id="inputHarga" placeholder="Input Harga" />
+        </td>
+        <td>
+          <select type="text" id="inputCategory" name="Category">
+            <option value="" selected disabled>All</option>
+            <option value="Buah">Buah</option>
+            <option value="Baju">Baju</option>
+            <option value="Elektronik">Elektronik</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" id="inputStock" placeholder="Input Stock" />
+        </td>
+      </table>
+      <br />
+      <input type="button" id="submitBtn" value="Input" onclick="addData()" />
+    </fieldset>
+    <fieldset>
+      <legend>Tabel Data</legend>
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Category</th>
+            <th>Nama</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Buy</th>
+            <th colspan="2">Action</th>
+          </tr>
+        </thead>
+        <tbody id="mainBody"></tbody>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend>Cart</legend>
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Category</th>
+            <th>Nama</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th colspan="2">Action</th>
+          </tr>
+        </thead>
+        <tbody id="cartBody"></tbody>
+      </table>
+      <br />
+      <input type="button" id="paymentBtn" value="Payment" />
+    </fieldset>
+    <fieldset>
+      <legend>Payment</legend>
+      <h2>Transaction Detail</h2>
+    </fieldset>
+  </body>
+  <script>
+    class Product {
+      constructor(id, nama, harga, category, stock, qty) {
+        this.id = id;
+        this.nama = nama;
+        this.harga = harga;
+        this.category = category;
+        //categories : buah, elektronik dan baju
+        this.stock = stock;
+        this.qty = 0;
+      }
+    }
+
+    let date = new Date();
+
+    let productData = [
+      new Product(date.getTime(), "HM", 12000, "Baju", 10, 0),
+      new Product(date.getTime() + 1, "Jeruk", 7000, "Buah", 10, 0),
+      new Product(date.getTime() + 2, "Xiaomi", 10000, "Elektronik", 10, 0)
+    ];
+
+    const showData = (arr = productData) => {
+      let display = "<tr>";
+      for (let i = 0; i < arr.length; i++) {
+        display += `<td>${arr[i].id}</td>`;
+        display += `<td>${arr[i].category}</td>`;
+        display += `<td>${arr[i].nama}</td>`;
+        display += `<td>${arr[i].harga}</td>`;
+        display += `<td>${arr[i].stock}</td>`;
+        display += `<td><input type="button" id="buyBtn" value="Buy" onclick="addToCart(${arr[i].id})"></td>`;
+        display += `<td><input type="button" id="editBtn" value="Edit"></td>`;
+        display += `<td><input type="button" id="deleteBtn" value="Delete" onclick="deleteData(${arr[i].id})"></td></tr>`;
+      }
+      document.getElementById("mainBody").innerHTML = display;
+    };
+
+    const addData = () => {
+      let inputNama = document.getElementById("inputNama").value;
+      let inputHarga = document.getElementById("inputHarga").value;
+      let inputCategory = document.getElementById("inputCategory").value;
+      let inputStock = document.getElementById("inputStock").value;
+
+      let date = new Date();
+      let newData = new Product(
+        date.getTime(),
+        inputNama,
+        inputHarga,
+        inputCategory,
+        inputStock,
+        0
+      );
+      productData.push(newData);
+      alert("Data berhasil ditambah.");
+      clearInput();
+      showData();
+    };
+
+    const filterData = () => {
+      let arrResult = [];
+      let filterNama = document.getElementById("searchNama").value;
+      let hmin = document.getElementById("searchHargaMin").value;
+      let hmax = document.getElementById("searchHargaMax").value;
+      let filterCategory = document.getElementById("searchCategory").value;
+      let i = 0;
+
+      productData.forEach(({ id, nama, harga, category, stock }, index) => {
+        if (
+          (nama.toLowerCase().startsWith(filterNama.toLowerCase()) ||
+            filterNama == "") &&
+          (category.toLowerCase().startsWith(filterCategory.toLowerCase()) ||
+            filterCategory == "All") &&
+          harga >= hmin &&
+          (harga <= hmax || hmax == 0)
+        ) {
+          arrResult.push(productData[index]);
+          i++;
+        }
+      });
+      if (arrResult.length > 0) {
+        if (i == productData.length) {
+          document.getElementById("noFound").innerHTML = ``;
+        } else {
+          document.getElementById("noFound").innerHTML = `${i} data ditemukan.`;
+        }
+        showData(arrResult);
+      } else {
+        document.getElementById(
+          "noFound"
+        ).innerHTML = `Tidak ada data yang ditemukan.`;
+        showData();
+      }
+    };
+
+    const clearInput = () => {
+      document.getElementById("inputNama").value = "";
+      document.getElementById("inputHarga").value = "";
+      document.getElementById("inputCategory").value = "";
+      document.getElementById("inputStock").value = "";
+    };
+
+    let cartData = [];
+    const showCart = () => {
+      let display = "<tr>";
+      for (let i = 0; i < cartData.length; i++) {
+        if (cartData[i].qty > 0) {
+          display += `<td>${cartData[i].id}</td>`;
+          display += `<td>${cartData[i].category}</td>`;
+          display += `<td>${cartData[i].nama}</td>`;
+          display += `<td>${cartData[i].harga}</td>`;
+          display += `<td>${cartData[i].qty}</td>`;
+          display += `<td><input type="button" id="deleteCartBtn" value="Delete"></td></tr>`;
+        }
+      }
+      document.getElementById("cartBody").innerHTML = display;
+    };
+
+    const addToCart = key => {
+      for (let i = 0; i < productData.length; i++) {
+        if (productData[i].id == key) {
+          if (checkCart(productData[i].id)) {
+            cartData[i].qty++;
+          } else {
+            productData[i].qty++;
+            cartData.push(productData[i]);
+          }
+        }
+      }
+      showCart();
+    };
+
+    const checkCart = keyid => {
+      let isExist = false;
+      for (let i = 0; i < cartData.length; i++) {
+        if (cartData[i].id == keyid) {
+          isExist = true;
+          break;
+        }
+      }
+      return isExist;
+    };
+
+    const deleteData = key => {
+      let isDelete = false;
+      for (let i = 0; i < productData.length; i++) {
+        if (productData[i].id == key) {
+          isDelete = confirm(
+            `Apakah anda yakin ingin menghapus data ${productData[i].nama} ?`
+          );
+          if (isDelete) {
+            for(let j=0;j<cartData.length;j++){
+              if(cartData[j].id==productData[i].id){
+                cartData.splice(j,1)
+                break
+              }
+            }
+            productData.splice(i, 1);
+            alert("Data berhasil dihapus.");
+            break;
+          } else {
+            break;
+          }
+        }
+      }
+      showCart();
+      showData();
+    };
+
+    showData();
+  </script>
+</html>

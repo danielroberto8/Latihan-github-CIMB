@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body
+    style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"
+  >
+    <style>
+      table,
+      tr,
+      td,
+      th {
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: center;
+      }
+    </style>
+    <table align="center" id="change">
+      <thead>
+        <tr>
+          <th onclick="sortData('nama')">Nama</th>
+          <th onclick="sortData('pekerjaan')">Pekerjaan</th>
+          <th onclick="sortData('umur')">Umur</th>
+          <th>Picture</th>
+          <th>Jenis Kelamin</th>
+          <th>Biodata</th>
+          <th>Opsi</th>
+        </tr>
+      </thead>
+      <tbody id="mainData"></tbody>
+      <tfoot>
+        <tr>
+          <td><input id="inputNama" type="text" placeholder="Input Name" /></td>
+          <td>
+            <input
+              id="inputPekerjaan"
+              type="text"
+              placeholder="Input Pekerjaan"
+            />
+          </td>
+          <td>
+            <input id="inputUmur" type="number" placeholder="Input Umur" />
+          </td>
+          <td>
+            <input
+              id="inputGambar"
+              type="text"
+              placeholder="Input link gambar"
+            />
+          </td>
+          <td>
+            <input
+              id="pria"
+              type="radio"
+              name="jenisKelamin"
+              value="Pria"
+            />Pria<br />
+            <input
+              id="wanita"
+              type="radio"
+              name="jenisKelamin"
+              value="Wanita"
+            />Wanita
+          </td>
+          <td>
+            <textarea
+              id="inputBiodata"
+              rows="3"
+              cols="30"
+              placeholder="Input Biodata"
+              onkeyup="menghitungKarakter(this.value)"
+            ></textarea>
+            <div id="charcount"></div>
+          </td>
+          <td>
+            <input
+              id="submitBtn"
+              type="button"
+              onclick="addData()"
+              style="background-color: green; color:white;"
+              value="Submit"
+            />
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    <br />
+    <table align="center">
+      <td><input id="searchNama" type="search" placeholder="Search by name" /></td>
+      <td><input id="searchPekerjaan" type="search" placeholder="Search by job" /></td>
+      <td>
+        <select id="selectKelamin">
+          <option value="" selected disabled>Select Gender</option>
+          <option value="Pria">Pria</option>
+          <option value="Wanita">Wanita</option>
+        </select>
+      </td>
+      <td>
+          <label>umur minimum</label>
+          <input id="searchUmurMin" type="number"><br>
+          <label for="searchUmurMax">umur maksimal</label>
+          <input id="searchUmurMax" type="number">
+      </td>
+      <td>
+        <input type="button" id="searchBtn" value="Search" onclick="searchDataOrang()" />
+      </td>
+    </table>
+  </body>
+  <script>
+    class Orang {
+      constructor(nama, pekerjaan, umur, foto, jenisKelamin, biodata) {
+        this.nama = nama;
+        this.pekerjaan = pekerjaan;
+        this.umur = umur;
+        this.foto = foto;
+        this.jenisKelamin = jenisKelamin;
+        this.biodata = biodata;
+      }
+    }
+    let dataOrang = [
+      new Orang(
+        "Martial",
+        "Striker",
+        24,
+        "https://resources.premierleague.com/photos/2019/12/12/c6b81300-a61e-429e-86dd-fb5672591866/anthony-martial-man-utd.jpg?width=860&height=573",
+        "Pria",
+        "Saya striker klub manchester united yang berasal dari negara prancis"
+      ),
+      new Orang(
+        "Haji Muhidin",
+        "Ketua RT",
+        60,
+        "https://statik.tempo.co/data/2012/10/04/id_143353/143353_620.jpg",
+        "Pria",
+        "Saya tidak suka bubur."
+      ),
+      new Orang(
+        "Master Limbad",
+        "Pesulap",
+        50,
+        "https://posberitakota.com/wp-content/uploads/2018/09/IMG-20180903-WA0121-2-696x742.jpg",
+        "Pria",
+        "......"
+      )
+    ];
+
+    const renderData = (arr = dataOrang) => {
+      let hasil = "";
+      let i = 0;
+      arr.forEach(({ nama, pekerjaan, umur, foto, jenisKelamin, biodata }) => {
+        let biodataCut = cutWords(biodata);
+        hasil += `<tr>
+                    <td>${nama}</td>
+                    <td>${pekerjaan}</td>
+                    <td>${umur}</td>
+                    <td><img src="${foto}" height="140" width="140"></td>
+                    <td>${jenisKelamin}</td>
+                    <td>${biodataCut}</td>
+                    <td><input type="button" style="background-color: red; color:white;" onclick="hapusData(${i})" value="apus"</td>
+                    </tr>`;
+        i++;
+      });
+      document.getElementById("mainData").innerHTML = hasil;
+      if (i == 0) alert("Datanya habis lur.\nSilahkan isi data yang baru.");
+    };
+
+    const cutWords = keyword => {
+      let result = "";
+      if (keyword.length > 30) {
+        result += keyword.slice(0, 30) + "(...)";
+      } else {
+        result = keyword;
+      }
+      return result;
+    };
+
+    let type = 0;
+    const sortData = key => {
+      function compare(a, b) {
+        if (a[key] < b[key]) {
+          if (type == 0) return -1;
+          else return 1;
+        } else {
+          if (type == 0) return 1;
+          else return -1;
+        }
+      }
+      dataOrang.sort(compare);
+      if (type == 0) type = 1;
+      else type = 0;
+
+      renderData();
+    };
+    const addData = () => {
+      let inputNama = document.getElementById("inputNama").value;
+      let inputPekerjaan = document.getElementById("inputPekerjaan").value;
+      let inputUmur = document.getElementById("inputUmur").value;
+      let inputGambar = document.getElementById("inputGambar").value;
+      let inputKelamin = "Wanita";
+      if (document.getElementById("pria").checked) {
+        inputKelamin = document.getElementById("pria").value;
+      }
+      let inputBiodata = document.getElementById("inputBiodata").value;
+      if (
+        inputNama != "" &&
+        inputPekerjaan != "" &&
+        inputUmur != "" &&
+        inputGambar != ""
+      ) {
+        let newData = new Orang(
+          inputNama,
+          inputPekerjaan,
+          inputUmur,
+          inputGambar,
+          inputKelamin,
+          inputBiodata
+        );
+        dataOrang.push(newData);
+        alert("Data berhasil ditambah");
+        clearField();
+        menghitungKarakter("");
+        renderData();
+      } else {
+        alert("Field data ada yang masih kosong.");
+        renderData();
+      }
+    };
+
+    const hapusData = deleteIndex => {
+      dataOrang.splice(deleteIndex, 1);
+      renderData();
+    };
+
+    const menghitungKarakter = str => {
+      let len = str.length;
+      if (len <= 30) {
+        document.getElementById("charcount").innerHTML = `<p>${len}/30</p>`;
+      } else {
+        document.getElementById("charcount").innerHTML =
+          '<p style="color:Tomato;">30/30</p>';
+      }
+    };
+
+    const clearField = () => {
+      document.getElementById("inputNama").value = "";
+      document.getElementById("inputPekerjaan").value = "";
+      document.getElementById("inputUmur").value = "";
+      document.getElementById("inputGambar").value = "";
+      document.getElementById("pria").checked = false;
+      document.getElementById("wanita").checked = false;
+      document.getElementById("inputBiodata").value = "";
+    };
+
+    const searchDataOrang = () => {
+        //gunakana startsWith()
+        //dataOrang.forEach((val)=>{
+        //     let {nama, gender,pekerjaan, umur} = val
+        //     if(nama.toLowerCase().startsWith(filterNama.toLowerCase()))
+        // })
+    let nama = document.getElementById("searchNama").value
+    let pekerjaan = document.getElementById("searchPekerjaan").value
+      let arrResult = [];
+      let temp = "";
+      let temp2 = "";
+      if (nama == ""&&pekerjaan=="") {
+        arrResult=searchUmur()
+        renderData(arrResult);
+      } else {
+        if (pekerjaan == "") {
+          for (let i = 0; i < dataOrang.length; i++) {
+              temp = dataOrang[i].nama.toLowerCase();
+            if (temp.search(nama.toLowerCase()) >= 0) {
+              arrResult.push(dataOrang[i]);
+            }
+          }
+          renderData(arrResult);
+        } else {
+          for (let i = 0; i < dataOrang.length; i++) {
+              temp = dataOrang[i].nama.toLowerCase();
+              temp2 = dataOrang[i].pekerjaan.toLowerCase();
+            if (
+              temp.search(nama.toLowerCase()) >= 0 &&
+              temp2.search(pekerjaan.toLowerCase()) >= 0
+            ) {
+              arrResult.push(dataOrang[i]);
+            }
+          }
+          renderData(arrResult);
+        }
+      }
+    };
+
+    const searchUmur = () =>{
+        let umin = document.getElementById("searchUmurMin").value
+        let umax = document.getElementById("searchUmurMax").value
+        let arrResult = []
+        for(let i = 0;i<dataOrang.length;i++){
+            if(dataOrang[i].umur>=umin&&(dataOrang[i].umur<=umax||umax==0)){
+                arrResult.push(dataOrang[i])
+            }
+        }
+        return arrResult
+    }
+    renderData();
+  </script>
+</html>

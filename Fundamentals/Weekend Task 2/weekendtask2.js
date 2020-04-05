@@ -102,7 +102,7 @@ const isPalindrome = keyword => {
   }
   return palindrome;
 };
-console.log(isPalindrome("NuRsES ruN"));
+console.log(isPalindrome("NuR sES ruN"));
 
 //Coding Challenge
 const countWords = sentence => {
