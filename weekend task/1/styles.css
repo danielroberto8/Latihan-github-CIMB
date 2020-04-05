@@ -1,0 +1,48 @@
+.bg-grey {
+  background-color: #7f8086;
+}
+.bg-black {
+  background-color: black;
+}
+
+.bg-yellow {
+  background-color: #f2a51a;
+}
+
+.img-sizing {
+  width: 220px;
+  height: 220px;
+}
+
+.img-abilities {
+  width: 100px;
+  height: 100px;
+  padding: 3px;
+  border: 2px solid black;
+  border-radius: 8px;
+}
+
+.img-gallery{
+    width: 300px;
+    height: 250px;
+
+}
+
+.black{
+    color: black;
+}
+
+.yellow {
+  color: #f2a51a;
+}
+
+#nama:hover {
+  color: #f2a51a;
+  text-decoration: underline;
+}
+
+.navigate:hover {
+  cursor: pointer;
+  color: #f2a51a;
+  transition: 0.3s;
+}
